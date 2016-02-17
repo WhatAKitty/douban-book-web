@@ -7,8 +7,8 @@ class SearchInfo {
 	}
 	
 	static parseFromParams(params) {
-		let q   = params.q;
-		let tag = params.tag;
+		let q   = params.q || (params.searchInfo && params.searchInfo.q);
+		let tag = params.tag || (params.searchInfo && params.searchInfo.tag);
 		
 		return new SearchInfo(q, tag);
 	}

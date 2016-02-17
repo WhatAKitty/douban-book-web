@@ -15,7 +15,12 @@ router.get("/search", (req, res) => {
 		if (err) {
 			res.status(err.code).send(err.msg);
 		} else {
-			res.json(data);
+			if (data.code) {
+				res.status(500).send(data.msg);
+			} else {
+				res.json(data);
+			}
+			
 		}
 	});
 });

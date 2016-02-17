@@ -9,9 +9,6 @@ import { Container, Grid, Row, Column, Content } from './react-semantify'
 
 import BookListApp from './BookListApp/BookListApp.react'
 
-// get html data from serverside.
-const data = JSON.parse(document.getElementById("bookAppData").innerHTML);
-
 // pack current page.
 const App = React.createClass({
 	render() {
@@ -23,7 +20,7 @@ const App = React.createClass({
 					</Row>
 					<Row >
 					 	<Column>
-							<BookListApp data={data} />
+							<BookListApp />
 						</Column>
 					</Row>
 				</Grid>

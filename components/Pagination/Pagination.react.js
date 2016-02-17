@@ -1,3 +1,4 @@
+import '../../semantic-ui/components/menu.min.css'
 import React from 'react'
 import { render } from 'react-dom'
 
@@ -6,6 +7,7 @@ import { Menu, Item } from '../react-semantify'
 const Page = React.createClass({
 	render() {
 		const {active, disabled, skipped, pageNumber} = this.props.page;
+		const toPage = this.props.toPage;
 		
 		if (skipped) {
 			return (
@@ -14,35 +16,43 @@ const Page = React.createClass({
 		}
 		
 		return (
-			<Item type='link' className={ (active?'active ':' ') + (disabled?'disabled':'') }>pageNumber</Item>
+			<Item type='link' className={ (active?'active ':' ') + (disabled?'disabled':'') } onClick={toPage}>
+				{pageNumber}
+			</Item>
 		);
-	};
+	}
 });
 
 const Pagination = React.createClass({
 	render() {
 		const maxPageShow 						= 5;
-		const {pageNumber, pageSize, totalPage}	= pageInfo;
+		const {pageNumber, pageSize, totalPage}	= this.props.pageInfo;
+		
+		if (!totalPage) {
+			return (
+				<Menu className="pagination"></Menu>
+			);
+		}
 		
 		let pages = new Array();
-		if (totalPage > maxPageShow) {
+		if (totalPage - pageNumber > maxPageShow) {
 			// hide some page items.
-			pages.push(1, 2, -1, totalPage - 1, totalPage);
+			pages.push(pageNumber, pageNumber + 1, -1, totalPage - 1, totalPage);
 		} else {
-			for (let i = 0; i < totalPage; i++) {
-				pages.push(i + 1);
+			for (let i = pageNumber; i <= totalPage; i++) {
+				pages.push(i);
 			}
 		}
 		
 		const pagination = pages.map((page) => {
-			let item = {
-				pageNumber: pageNumber,
+			const item = {
+				pageNumber: page,
 				active: pageNumber == page,
 				disabled: false,
-				skipped: pageNumber == -1
+				skipped: page == -1
 			}
 			return (
-				<Page page=item />
+				<Page page={item} toPage={this.props.toPage} />
 			);
 		});
 		
@@ -51,5 +61,7 @@ const Pagination = React.createClass({
 				{pagination}
 			</Menu>
 		);
-	};
+	}
 });
+
+export default Pagination

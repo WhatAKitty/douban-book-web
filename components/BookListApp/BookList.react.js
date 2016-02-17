@@ -4,10 +4,11 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { List, Item, Image, Content, Text, Link, Button, Icon, Label } from '../react-semantify'
+import Pagination from '../Pagination/Pagination.react.js'
 
 const BookItem = React.createClass({
 	render() {
-		let book = this.props.book;
+		const book = this.props.book;
 		return (
 			<Item key={book.id}>
 				<Label className="right floated">
@@ -25,16 +26,20 @@ const BookItem = React.createClass({
 
 const BookList = React.createClass({
 	render() {
-		let list = this.props.list.map((book) => {
+		const pageInfo = this.props.pageInfo;
+		const bookList = pageInfo.list.map((book) => {
 			return (
 				<BookItem book={book} />
 			);
 		});
 		
 		return (
-			<List className="very relaxed">
-			{list}
-			</List>
+			<div>
+				<List className="very relaxed">
+					{bookList}
+				</List>
+				<Pagination pageInfo={pageInfo} toPage={this.props.toPage} />
+			</div>
 		);
 	}
 });

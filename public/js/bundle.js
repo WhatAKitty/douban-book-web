@@ -66,9 +66,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// get html data from serverside.
-	var data = JSON.parse(document.getElementById("bookAppData").innerHTML);
-	
 	// pack current page.
 	var App = _react2.default.createClass({
 		displayName: 'App',
@@ -94,7 +91,7 @@
 						_react2.default.createElement(
 							_reactSemantify.Column,
 							null,
-							_react2.default.createElement(_BookListApp2.default, { data: data })
+							_react2.default.createElement(_BookListApp2.default, null)
 						)
 					)
 				)
@@ -28470,11 +28467,11 @@
 	
 	var _BookList2 = _interopRequireDefault(_BookList);
 	
-	var _Config = __webpack_require__(492);
+	var _Config = __webpack_require__(495);
 	
 	var _Config2 = _interopRequireDefault(_Config);
 	
-	var _PageInfo = __webpack_require__(493);
+	var _PageInfo = __webpack_require__(496);
 	
 	var _PageInfo2 = _interopRequireDefault(_PageInfo);
 	
@@ -28484,7 +28481,12 @@
 		displayName: 'BookListApp',
 		getInitialState: function getInitialState() {
 			return {
-				list: []
+				pageInfo: {
+					pageNumber: 1,
+					pageSize: 5,
+					totalPage: undefined,
+					list: []
+				}
 			};
 		},
 		componentDidMount: function componentDidMount() {
@@ -28497,16 +28499,43 @@
 		componentWillUnmount: function componentWillUnmount() {
 			this.ignoreLastFetch = true;
 		},
-		fetchList: function fetchList(pageInfo) {
+		fetchList: function fetchList(pageInfo, callback) {
 			var _this = this;
 	
+			var q = pageInfo.searchInfo.q;
+			var tag = pageInfo.searchInfo.tag;
 			_request2.default.get(_Config2.default.domain + _Config2.default.apiContext + "/search?" + pageInfo.stringify(), function (err, response, body) {
+				if (response.statusCode != 200) {
+					console.log(body);
+					return;
+				}
+	
 				var data = JSON.parse(body);
-				_this.setState({ list: data.books });
+				_this.setState({ pageInfo: {
+						pageNumber: data.start / data.count + 1,
+						pageSize: data.count,
+						searchInfo: {
+							q: q,
+							tag: tag
+						},
+						totalPage: data.total / data.count + (data.total % data.count == 0 ? 0 : 1),
+						list: data.books
+					} });
+	
+				if (callback && typeof callback === 'function') {
+					callback();
+				}
 			});
 		},
+		skipPage: function skipPage(e) {
+			var target = e.target;
+			var pageInfo = this.state.pageInfo;
+			pageInfo.pageNumber = target.textContent;
+	
+			this.fetchList(_PageInfo2.default.parseFromParams(pageInfo));
+		},
 		render: function render() {
-			return _react2.default.createElement(_BookList2.default, { list: this.state.list });
+			return _react2.default.createElement(_BookList2.default, { pageInfo: this.state.pageInfo, toPage: this.skipPage });
 		}
 	});
 	
@@ -79680,6 +79709,10 @@
 	
 	var _reactSemantify = __webpack_require__(222);
 	
+	var _PaginationReact = __webpack_require__(492);
+	
+	var _PaginationReact2 = _interopRequireDefault(_PaginationReact);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var BookItem = _react2.default.createClass({
@@ -79713,24 +79746,23 @@
 		}
 	});
 	
-	var BookListPagination = _react2.default.createClass({
-		displayName: 'BookListPagination',
-		render: function render() {
-			var pageInfo = this.props.pageInfo;
-		}
-	});
-	
 	var BookList = _react2.default.createClass({
 		displayName: 'BookList',
 		render: function render() {
-			var list = this.props.list.map(function (book) {
+			var pageInfo = this.props.pageInfo;
+			var bookList = pageInfo.list.map(function (book) {
 				return _react2.default.createElement(BookItem, { book: book });
 			});
 	
 			return _react2.default.createElement(
-				_reactSemantify.List,
-				{ className: 'very relaxed' },
-				list
+				'div',
+				null,
+				_react2.default.createElement(
+					_reactSemantify.List,
+					{ className: 'very relaxed' },
+					bookList
+				),
+				_react2.default.createElement(_PaginationReact2.default, { pageInfo: pageInfo, toPage: this.props.toPage })
 			);
 		}
 	});
@@ -79758,6 +79790,108 @@
 /* 490 */,
 /* 491 */,
 /* 492 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	__webpack_require__(493);
+	
+	var _react = __webpack_require__(7);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(164);
+	
+	var _reactSemantify = __webpack_require__(222);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Page = _react2.default.createClass({
+		displayName: 'Page',
+		render: function render() {
+			var _props$page = this.props.page;
+			var active = _props$page.active;
+			var disabled = _props$page.disabled;
+			var skipped = _props$page.skipped;
+			var pageNumber = _props$page.pageNumber;
+	
+			var toPage = this.props.toPage;
+	
+			if (skipped) {
+				return _react2.default.createElement(
+					_reactSemantify.Item,
+					{ type: 'link', className: 'disabled' },
+					'...'
+				);
+			}
+	
+			return _react2.default.createElement(
+				_reactSemantify.Item,
+				{ type: 'link', className: (active ? 'active ' : ' ') + (disabled ? 'disabled' : ''), onClick: toPage },
+				pageNumber
+			);
+		}
+	});
+	
+	var Pagination = _react2.default.createClass({
+		displayName: 'Pagination',
+		render: function render() {
+			var _this = this;
+	
+			var maxPageShow = 5;
+			var _props$pageInfo = this.props.pageInfo;
+			var pageNumber = _props$pageInfo.pageNumber;
+			var pageSize = _props$pageInfo.pageSize;
+			var totalPage = _props$pageInfo.totalPage;
+	
+	
+			if (!totalPage) {
+				return _react2.default.createElement(_reactSemantify.Menu, { className: 'pagination' });
+			}
+	
+			var pages = new Array();
+			if (totalPage - pageNumber > maxPageShow) {
+				// hide some page items.
+				pages.push(pageNumber, pageNumber + 1, -1, totalPage - 1, totalPage);
+			} else {
+				for (var i = pageNumber; i <= totalPage; i++) {
+					pages.push(i);
+				}
+			}
+	
+			var pagination = pages.map(function (page) {
+				var item = {
+					pageNumber: page,
+					active: pageNumber == page,
+					disabled: false,
+					skipped: page == -1
+				};
+				return _react2.default.createElement(Page, { page: item, toPage: _this.props.toPage });
+			});
+	
+			return _react2.default.createElement(
+				_reactSemantify.Menu,
+				{ className: 'pagination' },
+				pagination
+			);
+		}
+	});
+	
+	exports.default = Pagination;
+
+/***/ },
+/* 493 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 494 */,
+/* 495 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -79773,7 +79907,7 @@
 	exports.default = Config;
 
 /***/ },
-/* 493 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79803,8 +79937,8 @@
 		_createClass(SearchInfo, null, [{
 			key: 'parseFromParams',
 			value: function parseFromParams(params) {
-				var q = params.q;
-				var tag = params.tag;
+				var q = params.q || params.searchInfo && params.searchInfo.q;
+				var tag = params.tag || params.searchInfo && params.searchInfo.tag;
 	
 				return new SearchInfo(q, tag);
 			}
