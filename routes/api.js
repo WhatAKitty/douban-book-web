@@ -1,11 +1,11 @@
 "use strict";
-import express from 'express';
-import Douban from 'douban-book-client';
+import express 	from 'express';
+import Douban 	from 'douban-book-client';
 
-const app = express.Router();
-const api = new Douban();
+let router = express.Router();
 
-app.get("/search", (req, res) => {
+router.get("/search", (req, res) => {
+	let api = new Douban();
 	api.search({
 		q: req.query.q,
 		start: req.query.start,
@@ -19,3 +19,5 @@ app.get("/search", (req, res) => {
 		}
 	});
 });
+
+export default router;

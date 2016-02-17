@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
+/******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -47,20 +47,20 @@
 
 	'use strict';
 
-	__webpack_require__(294);
+	__webpack_require__(494);
 
-	__webpack_require__(296);
+	__webpack_require__(496);
 
 /***/ },
 
-/***/ 294:
+/***/ 494:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
 
-/***/ 296:
+/***/ 496:
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

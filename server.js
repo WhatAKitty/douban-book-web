@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser   from 'body-parser';
 
 import routes       from './routes/index';
+import doubanAPI    from './routes/api';
 
 let app = express();
 
@@ -18,14 +19,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.all('*', function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'PUT, GET, POST, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
+app.use("/", routes);
+app.use("/api", doubanAPI);
 
-app.get("/", routes);
+app.use((err, req, res, next) => {
+  if (err) {
+    console.log(err);
+  }
+  next(err, req, res, next);
+});
 
 // using arrow syntax
 app.use((req, res, next) => {
