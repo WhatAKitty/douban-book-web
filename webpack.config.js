@@ -20,7 +20,7 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    noParse: /node_modules\/json-schema\/lib\/validate\.js/,
+    noParse: /node_modules\\json-schema\\lib\\validate\.js/,
     loaders: [
       {
         test: /\.js$/,

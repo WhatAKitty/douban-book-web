@@ -28486,7 +28486,8 @@
 					pageSize: 5,
 					totalPage: undefined,
 					list: []
-				}
+				},
+				loading: false
 			};
 		},
 		componentDidMount: function componentDidMount() {
@@ -28502,6 +28503,9 @@
 		fetchList: function fetchList(pageInfo, callback) {
 			var _this = this;
 	
+			// set loading true
+			this.setState({ loading: true });
+	
 			var q = pageInfo.searchInfo.q;
 			var tag = pageInfo.searchInfo.tag;
 			_request2.default.get(_Config2.default.domain + _Config2.default.apiContext + "/search?" + pageInfo.stringify(), function (err, response, body) {
@@ -28511,16 +28515,19 @@
 				}
 	
 				var data = JSON.parse(body);
-				_this.setState({ pageInfo: {
-						pageNumber: data.start / data.count + 1,
+				_this.setState({
+					pageInfo: {
+						pageNumber: Math.floor(data.start / data.count) + 1,
 						pageSize: data.count,
 						searchInfo: {
 							q: q,
 							tag: tag
 						},
-						totalPage: data.total / data.count + (data.total % data.count == 0 ? 0 : 1),
+						totalPage: Math.floor(data.total / data.count) + (data.total % data.count == 0 ? 0 : 1),
 						list: data.books
-					} });
+					},
+					loading: false
+				});
 	
 				if (callback && typeof callback === 'function') {
 					callback();
@@ -28529,13 +28536,18 @@
 		},
 		skipPage: function skipPage(e) {
 			var target = e.target;
+	
+			if (target.className.includes('disabled')) {
+				return false;
+			}
+	
 			var pageInfo = this.state.pageInfo;
-			pageInfo.pageNumber = target.textContent;
+			pageInfo.pageNumber = target.dataset.page;
 	
 			this.fetchList(_PageInfo2.default.parseFromParams(pageInfo));
 		},
 		render: function render() {
-			return _react2.default.createElement(_BookList2.default, { pageInfo: this.state.pageInfo, toPage: this.skipPage });
+			return _react2.default.createElement(_BookList2.default, { loading: this.state.loading, pageInfo: this.state.pageInfo, toPage: this.skipPage });
 		}
 	});
 	
@@ -33296,7 +33308,7 @@
 		"_args": [
 			[
 				"tough-cookie@~2.2.0",
-				"/home/xuq/git/douban-book-web/node_modules/request"
+				"e:\\GitRepo\\douban-book-web\\node_modules\\request"
 			]
 		],
 		"_from": "tough-cookie@>=2.2.0 <2.3.0",
@@ -33326,7 +33338,7 @@
 		"_shasum": "3b0516b799e70e8164436a1446e7e5877fda118e",
 		"_shrinkwrap": null,
 		"_spec": "tough-cookie@~2.2.0",
-		"_where": "/home/xuq/git/douban-book-web/node_modules/request",
+		"_where": "e:\\GitRepo\\douban-book-web\\node_modules\\request",
 		"author": {
 			"email": "jstashewsky@salesforce.com",
 			"name": "Jeremy Stashewsky"
@@ -49893,8 +49905,14 @@
 	  if (typeof buf == 'number')
 	    buf = buf.toString()
 	
-	  this._bufs.push(isBuffer ? buf : new Buffer(buf))
-	  this.length += buf.length
+	  if (buf instanceof BufferList) {
+	    this._bufs.push.apply(this._bufs, buf._bufs)
+	    this.length += buf.length
+	  } else {
+	    this._bufs.push(isBuffer ? buf : new Buffer(buf))
+	    this.length += buf.length
+	  }
+	
 	  return this
 	}
 	
@@ -49998,7 +50016,7 @@
 	
 	BufferList.prototype.consume = function (bytes) {
 	  while (this._bufs.length) {
-	    if (bytes > this._bufs[0].length) {
+	    if (bytes >= this._bufs[0].length) {
 	      bytes -= this._bufs[0].length
 	      this.length -= this._bufs[0].length
 	      this._bufs.shift()
@@ -59454,7 +59472,8 @@
 	
 		for (i = 0; i < parts.length; ++i) {
 			var data = key.part[parts[i]].data;
-			data = utils.mpNormalize(data);
+			if (algInfo.normalize !== false)
+				data = utils.mpNormalize(data);
 			buf.writeBuffer(data);
 		}
 	
@@ -65777,7 +65796,7 @@
 		"application/dash+xml": {
 			"source": "iana",
 			"extensions": [
-				"mdp"
+				"mpd"
 			]
 		},
 		"application/dashdelta": {
@@ -66568,6 +66587,17 @@
 				"eps",
 				"ps"
 			]
+		},
+		"application/ppsp-tracker+json": {
+			"source": "iana",
+			"compressible": true
+		},
+		"application/problem+json": {
+			"source": "iana",
+			"compressible": true
+		},
+		"application/problem+xml": {
+			"source": "iana"
 		},
 		"application/provenance+xml": {
 			"source": "iana"
@@ -68156,6 +68186,9 @@
 		"application/vnd.hcl-bireports": {
 			"source": "iana"
 		},
+		"application/vnd.hdt": {
+			"source": "iana"
+		},
 		"application/vnd.heroku+json": {
 			"source": "iana",
 			"compressible": true
@@ -68951,6 +68984,9 @@
 		},
 		"application/vnd.ms-printing.printticket+xml": {
 			"source": "apache"
+		},
+		"application/vnd.ms-printschematicket+xml": {
+			"source": "iana"
 		},
 		"application/vnd.ms-project": {
 			"source": "iana",
@@ -71639,7 +71675,8 @@
 			"extensions": [
 				"xml",
 				"xsl",
-				"xsd"
+				"xsd",
+				"rng"
 			]
 		},
 		"application/xml-dtd": {
@@ -71946,8 +71983,8 @@
 			"source": "iana",
 			"compressible": false,
 			"extensions": [
-				"mp4a",
-				"m4a"
+				"m4a",
+				"mp4a"
 			]
 		},
 		"audio/mp4a-latm": {
@@ -72917,6 +72954,9 @@
 		"model/vnd.parasolid.transmit.text": {
 			"source": "iana"
 		},
+		"model/vnd.rosette.annotated-data-model": {
+			"source": "iana"
+		},
 		"model/vnd.valve.source.compiled-map": {
 			"source": "iana"
 		},
@@ -73205,6 +73245,12 @@
 			"extensions": [
 				"sgml",
 				"sgm"
+			]
+		},
+		"text/slim": {
+			"extensions": [
+				"slim",
+				"slm"
 			]
 		},
 		"text/stylus": {
@@ -79709,9 +79755,13 @@
 	
 	var _reactSemantify = __webpack_require__(222);
 	
-	var _PaginationReact = __webpack_require__(492);
+	var _Pagination = __webpack_require__(492);
 	
-	var _PaginationReact2 = _interopRequireDefault(_PaginationReact);
+	var _Pagination2 = _interopRequireDefault(_Pagination);
+	
+	var _Loader = __webpack_require__(501);
+	
+	var _Loader2 = _interopRequireDefault(_Loader);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -79757,12 +79807,13 @@
 			return _react2.default.createElement(
 				'div',
 				null,
+				_react2.default.createElement(_Loader2.default, { msg: '正在加载中...', active: this.props.loading }),
 				_react2.default.createElement(
 					_reactSemantify.List,
 					{ className: 'very relaxed' },
 					bookList
 				),
-				_react2.default.createElement(_PaginationReact2.default, { pageInfo: pageInfo, toPage: this.props.toPage })
+				_react2.default.createElement(_Pagination2.default, { pageInfo: pageInfo, toPage: this.props.toPage })
 			);
 		}
 	});
@@ -79818,6 +79869,7 @@
 			var disabled = _props$page.disabled;
 			var skipped = _props$page.skipped;
 			var pageNumber = _props$page.pageNumber;
+			var pageShow = _props$page.pageShow;
 	
 			var toPage = this.props.toPage;
 	
@@ -79831,8 +79883,8 @@
 	
 			return _react2.default.createElement(
 				_reactSemantify.Item,
-				{ type: 'link', className: (active ? 'active ' : ' ') + (disabled ? 'disabled' : ''), onClick: toPage },
-				pageNumber
+				{ 'data-page': pageNumber, type: 'link', className: (active ? 'active ' : ' ') + (disabled ? 'disabled' : ''), onClick: toPage },
+				pageShow
 			);
 		}
 	});
@@ -79853,18 +79905,22 @@
 				return _react2.default.createElement(_reactSemantify.Menu, { className: 'pagination' });
 			}
 	
+			var hasPrevious = pageNumber > 1;
+			var hasNext = pageNumber < totalPage;
+	
 			var pages = new Array();
 			if (totalPage - pageNumber > maxPageShow) {
 				// hide some page items.
 				pages.push(pageNumber, pageNumber + 1, -1, totalPage - 1, totalPage);
 			} else {
-				for (var i = pageNumber; i <= totalPage; i++) {
+				for (var i = totalPage - 5; i <= totalPage; i++) {
 					pages.push(i);
 				}
 			}
 	
 			var pagination = pages.map(function (page) {
 				var item = {
+					pageShow: page,
 					pageNumber: page,
 					active: pageNumber == page,
 					disabled: false,
@@ -79873,10 +79929,43 @@
 				return _react2.default.createElement(Page, { page: item, toPage: _this.props.toPage });
 			});
 	
+			var first = {
+				pageShow: '<<',
+				pageNumber: 1,
+				active: false,
+				disabled: false,
+				skipped: false
+			};
+			var last = {
+				pageShow: '>>',
+				pageNumber: totalPage,
+				active: false,
+				disabled: false,
+				skipped: false
+			};
+			var prev = {
+				pageShow: '<',
+				pageNumber: pageNumber - 1,
+				active: false,
+				disabled: hasPrevious ? false : true,
+				skipped: false
+			};
+			var next = {
+				pageShow: '>',
+				pageNumber: pageNumber + 1,
+				active: false,
+				disabled: hasNext ? false : true,
+				skipped: false
+			};
+	
 			return _react2.default.createElement(
 				_reactSemantify.Menu,
 				{ className: 'pagination' },
-				pagination
+				_react2.default.createElement(Page, { page: first, toPage: this.props.toPage }),
+				_react2.default.createElement(Page, { page: prev, toPage: this.props.toPage }),
+				pagination,
+				_react2.default.createElement(Page, { page: next, toPage: this.props.toPage }),
+				_react2.default.createElement(Page, { page: last, toPage: this.props.toPage })
 			);
 		}
 	});
@@ -79988,6 +80077,71 @@
 	}();
 	
 	exports.default = PageInfo;
+
+/***/ },
+/* 497 */,
+/* 498 */,
+/* 499 */,
+/* 500 */,
+/* 501 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	__webpack_require__(502);
+	
+	__webpack_require__(504);
+	
+	var _react = __webpack_require__(7);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(164);
+	
+	var _reactSemantify = __webpack_require__(222);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LoaderM = _react2.default.createClass({
+	    displayName: 'LoaderM',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactSemantify.Loader,
+	            { className: 'text' },
+	            this.props.msg
+	        );
+	    }
+	});
+	
+	var DimmerM = _react2.default.createClass({
+	    displayName: 'DimmerM',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactSemantify.Dimmer,
+	            { active: this.props.active, className: 'inverted' },
+	            _react2.default.createElement(LoaderM, { msg: this.props.msg })
+	        );
+	    }
+	});
+	
+	exports.default = DimmerM;
+
+/***/ },
+/* 502 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 503 */,
+/* 504 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);

@@ -6,7 +6,7 @@ import { Menu, Item } from '../react-semantify'
 
 const Page = React.createClass({
 	render() {
-		const {active, disabled, skipped, pageNumber} = this.props.page;
+		const {active, disabled, skipped, pageNumber, pageShow} = this.props.page;
 		const toPage = this.props.toPage;
 		
 		if (skipped) {
@@ -16,8 +16,8 @@ const Page = React.createClass({
 		}
 		
 		return (
-			<Item type='link' className={ (active?'active ':' ') + (disabled?'disabled':'') } onClick={toPage}>
-				{pageNumber}
+			<Item data-page={pageNumber} type='link' className={ (active?'active ':' ') + (disabled?'disabled':'') } onClick={toPage}>
+				{pageShow}
 			</Item>
 		);
 	}
@@ -34,18 +34,22 @@ const Pagination = React.createClass({
 			);
 		}
 		
+        const hasPrevious                       = pageNumber > 1;
+        const hasNext                           = pageNumber < totalPage;
+        
 		let pages = new Array();
 		if (totalPage - pageNumber > maxPageShow) {
 			// hide some page items.
 			pages.push(pageNumber, pageNumber + 1, -1, totalPage - 1, totalPage);
 		} else {
-			for (let i = pageNumber; i <= totalPage; i++) {
+			for (let i = totalPage - 5; i <= totalPage; i++) {
 				pages.push(i);
 			}
 		}
 		
 		const pagination = pages.map((page) => {
 			const item = {
+                pageShow: page,
 				pageNumber: page,
 				active: pageNumber == page,
 				disabled: false,
@@ -55,10 +59,43 @@ const Pagination = React.createClass({
 				<Page page={item} toPage={this.props.toPage} />
 			);
 		});
+        
+        const first = {
+            pageShow: '<<',
+            pageNumber: 1,
+            active: false,
+            disabled: false,
+            skipped: false
+        }
+        const last = {
+            pageShow: '>>',
+            pageNumber: totalPage,
+            active: false,
+            disabled: false,
+            skipped: false
+        }
+        const prev = {
+            pageShow: '<',
+            pageNumber: pageNumber - 1,
+            active: false,
+            disabled: hasPrevious ? false : true,
+            skipped: false
+        }
+        const next = {
+            pageShow: '>',
+            pageNumber: pageNumber + 1,
+            active: false,
+            disabled: hasNext ? false : true,
+            skipped: false
+        }
 		
 		return (
 			<Menu className="pagination">
+                <Page page={first} toPage={this.props.toPage} />
+                <Page page={prev} toPage={this.props.toPage} />
 				{pagination}
+                <Page page={next} toPage={this.props.toPage} />
+                <Page page={last} toPage={this.props.toPage} />
 			</Menu>
 		);
 	}

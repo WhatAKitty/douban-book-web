@@ -4,7 +4,8 @@ import React from 'react'
 import { render } from 'react-dom'
 
 import { List, Item, Image, Content, Text, Link, Button, Icon, Label } from '../react-semantify'
-import Pagination from '../Pagination/Pagination.react.js'
+import Pagination from '../Pagination/Pagination.react'
+import Loader from '../Loader/Loader.react'
 
 const BookItem = React.createClass({
 	render() {
@@ -35,6 +36,7 @@ const BookList = React.createClass({
 		
 		return (
 			<div>
+                <Loader msg='正在加载中...' active={this.props.loading} />
 				<List className="very relaxed">
 					{bookList}
 				</List>

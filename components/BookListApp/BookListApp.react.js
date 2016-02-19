@@ -18,7 +18,8 @@ const BookListApp = React.createClass({
 				pageSize: 5,
 				totalPage: undefined,
 				list: []
-			}
+			},
+            loading: false
 		};
 	},
 	componentDidMount() {
@@ -32,6 +33,9 @@ const BookListApp = React.createClass({
 		this.ignoreLastFetch = true
 	},
 	fetchList(pageInfo, callback) {
+        // set loading true
+        this.setState({loading: true});
+        
 		const q = pageInfo.searchInfo.q;
 		const tag = pageInfo.searchInfo.tag;
 		request.get(Config.domain + Config.apiContext + "/search?" + pageInfo.stringify(), (err, response, body) => {
@@ -41,16 +45,19 @@ const BookListApp = React.createClass({
 			}
 			
 			const data = JSON.parse(body);
-			this.setState({pageInfo: {
-				pageNumber: data.start / data.count + 1,
-				pageSize: data.count,
-				searchInfo: {
-					q: q,
-					tag: tag
-				},
-				totalPage: data.total / data.count + (data.total % data.count == 0 ? 0 : 1),
-				list: data.books
-			}});
+			this.setState({
+                pageInfo: {
+                    pageNumber: Math.floor(data.start / data.count) + 1,
+                    pageSize: data.count,
+                    searchInfo: {
+                        q: q,
+                        tag: tag
+                    },
+                    totalPage: Math.floor(data.total / data.count) + (data.total % data.count == 0 ? 0 : 1),
+                    list: data.books
+			    },
+                loading: false
+            });
 			
 			if (callback && typeof callback === 'function') {
 				callback();
@@ -59,14 +66,19 @@ const BookListApp = React.createClass({
 	},
 	skipPage(e) {
 		const target = e.target;
+        
+        if (target.className.includes('disabled')) {
+            return false;
+        }
+        
 		let pageInfo = this.state.pageInfo;
-		pageInfo.pageNumber = target.textContent;
+		pageInfo.pageNumber = target.dataset.page;
 		
 		this.fetchList(PageInfo.parseFromParams(pageInfo));
 	},
 	render() {
 		return (
-			<BookList pageInfo={this.state.pageInfo} toPage={this.skipPage} />
+			<BookList loading={this.state.loading} pageInfo={this.state.pageInfo} toPage={this.skipPage} />
 		);
 	}
 });
