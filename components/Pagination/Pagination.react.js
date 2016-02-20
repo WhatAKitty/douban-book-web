@@ -42,9 +42,16 @@ const Pagination = React.createClass({
 			// hide some page items.
 			pages.push(pageNumber, pageNumber + 1, -1, totalPage - 1, totalPage);
 		} else {
-			for (let i = totalPage - 5; i <= totalPage; i++) {
-				pages.push(i);
-			}
+            if (totalPage < 5) {
+                for (let i = 1; i <= totalPage; i++) {
+                    pages.push(i);
+                }
+            } else {
+                for (let i = totalPage - 5; i <= totalPage; i++) {
+                    pages.push(i);
+                }
+            }
+			
 		}
 		
 		const pagination = pages.map((page) => {

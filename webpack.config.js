@@ -1,6 +1,6 @@
 var path = require('path');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var reactSemantifyPath = path.join(__dirname, 'components', 'react-semantify');
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   node: {
@@ -9,8 +9,9 @@ module.exports = {
     tls: "empty"
   },
   entry: {
+    vendor: ["react", "react-dom", "react-router"],
     common: "./components/Common.react.js",
-    bundle: "./components/App.react.js"
+    app: "./components/App.react.js"
   },
   output: {
     publicPath: '/',
@@ -20,7 +21,7 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    noParse: /node_modules\\json-schema\\lib\\validate\.js/,
+    noParse: /node_modules\\json-schema\\lib\\validate\.js/,    // For windows env and should be \/ not \\ in linux env.
     loaders: [
       {
         test: /\.js$/,
@@ -36,6 +37,10 @@ module.exports = {
     ]
   },
   plugins: [
-      new ExtractTextPlugin("css/[name].css")
+    new ExtractTextPlugin("css/[name].css"),
+    new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        filename: 'js/vendor.js'
+    })
   ]
 };

@@ -39,8 +39,8 @@
     "lint": "eslint ./components/App.js",
     "start": "babel-node ./bin/www",
     "debug": "babel-node --debug ./bin/www",
-    "build": "webpack --progress --colors",
-    "watch": "webpack --progress --colors --watch",
+    "dist": "webpack --progress --colors -p",
+    "watch": "webpack --progress --colors --watch -d",
     "auto-start": "nodemon --exec \"npm run lint && npm start\" --ignore public/js"
   },
   "keywords": [

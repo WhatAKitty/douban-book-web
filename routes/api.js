@@ -11,16 +11,11 @@ router.get("/search", (req, res) => {
 		start: req.query.start,
 		count: req.query.count,
 		tag: req.query.tag
-	}, (err, data) => {
+	}, (err, data, response) => {
 		if (err) {
 			res.status(err.code).send(err.msg);
 		} else {
-			if (data.code) {
-				res.status(500).send(data.msg);
-			} else {
-				res.json(data);
-			}
-			
+            res.json(data);
 		}
 	});
 });
