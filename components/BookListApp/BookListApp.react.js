@@ -37,9 +37,6 @@ const BookListApp = React.createClass({
         // set loading true
         this.setState({loading: true});
         
-        // focus booklistApp dom prevent from inputing.
-        document.body.focus();
-        
         // start timeout
         let delayInput = setTimeout(() => {
             // clear timeout

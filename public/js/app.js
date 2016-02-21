@@ -4203,11 +4203,11 @@ webpackJsonp([0],[
 	
 	var _BookList2 = _interopRequireDefault(_BookList);
 	
-	var _Config = __webpack_require__(/*! ../Config.react */ 500);
+	var _Config = __webpack_require__(/*! ../Config.react */ 507);
 	
 	var _Config2 = _interopRequireDefault(_Config);
 	
-	var _PageInfo = __webpack_require__(/*! ../Obj/PageInfo */ 501);
+	var _PageInfo = __webpack_require__(/*! ../Obj/PageInfo */ 508);
 	
 	var _PageInfo2 = _interopRequireDefault(_PageInfo);
 	
@@ -4242,9 +4242,6 @@ webpackJsonp([0],[
 	
 	        // set loading true
 	        this.setState({ loading: true });
-	
-	        // focus booklistApp dom prevent from inputing.
-	        document.body.focus();
 	
 	        // start timeout
 	        var delayInput = setTimeout(function () {
@@ -56120,7 +56117,7 @@ webpackJsonp([0],[
 	
 	__webpack_require__(/*! ../../semantic-ui/components/icon.min.css */ 485);
 	
-	__webpack_require__(/*! ../../semantic-ui/components/message.min.css */ 511);
+	__webpack_require__(/*! ../../semantic-ui/components/message.min.css */ 492);
 	
 	var _react = __webpack_require__(/*! react */ 7);
 	
@@ -56130,15 +56127,15 @@ webpackJsonp([0],[
 	
 	var _reactSemantify = __webpack_require__(/*! ../react-semantify */ 222);
 	
-	var _Pagination = __webpack_require__(/*! ../Pagination/Pagination.react */ 492);
+	var _Pagination = __webpack_require__(/*! ../Pagination/Pagination.react */ 494);
 	
 	var _Pagination2 = _interopRequireDefault(_Pagination);
 	
-	var _Loader = __webpack_require__(/*! ../Loader/Loader.react */ 495);
+	var _Loader = __webpack_require__(/*! ../Loader/Loader.react */ 497);
 	
 	var _Loader2 = _interopRequireDefault(_Loader);
 	
-	var _Searchbox = __webpack_require__(/*! ../Searchbox/Searchbox.react */ 506);
+	var _Searchbox = __webpack_require__(/*! ../Searchbox/Searchbox.react */ 502);
 	
 	var _Searchbox2 = _interopRequireDefault(_Searchbox);
 	
@@ -56257,6 +56254,16 @@ webpackJsonp([0],[
 /* 490 */,
 /* 491 */,
 /* 492 */
+/*!************************************************!*\
+  !*** ./semantic-ui/components/message.min.css ***!
+  \************************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 493 */,
+/* 494 */
 /*!***************************************************!*\
   !*** ./components/Pagination/Pagination.react.js ***!
   \***************************************************/
@@ -56268,7 +56275,7 @@ webpackJsonp([0],[
 		value: true
 	});
 	
-	__webpack_require__(/*! ../../semantic-ui/components/menu.min.css */ 493);
+	__webpack_require__(/*! ../../semantic-ui/components/menu.min.css */ 495);
 	
 	var _react = __webpack_require__(/*! react */ 7);
 	
@@ -56398,7 +56405,7 @@ webpackJsonp([0],[
 	exports.default = Pagination;
 
 /***/ },
-/* 493 */
+/* 495 */
 /*!*********************************************!*\
   !*** ./semantic-ui/components/menu.min.css ***!
   \*********************************************/
@@ -56407,8 +56414,8 @@ webpackJsonp([0],[
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 494 */,
-/* 495 */
+/* 496 */,
+/* 497 */
 /*!*******************************************!*\
   !*** ./components/Loader/Loader.react.js ***!
   \*******************************************/
@@ -56420,9 +56427,9 @@ webpackJsonp([0],[
 	    value: true
 	});
 	
-	__webpack_require__(/*! ../../semantic-ui/components/loader.min.css */ 496);
+	__webpack_require__(/*! ../../semantic-ui/components/loader.min.css */ 498);
 	
-	__webpack_require__(/*! ../../semantic-ui/components/dimmer.min.css */ 498);
+	__webpack_require__(/*! ../../semantic-ui/components/dimmer.min.css */ 500);
 	
 	var _react = __webpack_require__(/*! react */ 7);
 	
@@ -56459,7 +56466,7 @@ webpackJsonp([0],[
 	exports.default = DimmerM;
 
 /***/ },
-/* 496 */
+/* 498 */
 /*!***********************************************!*\
   !*** ./semantic-ui/components/loader.min.css ***!
   \***********************************************/
@@ -56468,8 +56475,8 @@ webpackJsonp([0],[
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 497 */,
-/* 498 */
+/* 499 */,
+/* 500 */
 /*!***********************************************!*\
   !*** ./semantic-ui/components/dimmer.min.css ***!
   \***********************************************/
@@ -56478,8 +56485,82 @@ webpackJsonp([0],[
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 499 */,
-/* 500 */
+/* 501 */,
+/* 502 */
+/*!*************************************************!*\
+  !*** ./components/Searchbox/Searchbox.react.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	__webpack_require__(/*! ../../semantic-ui/components/input.min.css */ 503);
+	
+	__webpack_require__(/*! ../../semantic-ui/components/icon.min.css */ 485);
+	
+	__webpack_require__(/*! ../../semantic-ui/components/search.min.css */ 505);
+	
+	var _react = __webpack_require__(/*! react */ 7);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 164);
+	
+	var _reactSemantify = __webpack_require__(/*! ../react-semantify */ 222);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Searchbox = _react2.default.createClass({
+	    displayName: 'Searchbox',
+	    render: function render() {
+	        var searchInput = undefined;
+	        if (this.props.disabled) {
+	            searchInput = _react2.default.createElement('input', { className: 'prompt', type: 'text', placeholder: this.props.hint, onChange: this.props.search, disabled: true });
+	        } else {
+	            searchInput = _react2.default.createElement('input', { className: 'prompt', type: 'text', placeholder: this.props.hint, onChange: this.props.search });
+	        }
+	
+	        return _react2.default.createElement(
+	            _reactSemantify.Search,
+	            null,
+	            _react2.default.createElement(
+	                _reactSemantify.Input,
+	                { className: 'fluid icon mini' },
+	                searchInput,
+	                _react2.default.createElement(_reactSemantify.Icon, { className: 'search' })
+	            )
+	        );
+	    }
+	});
+	
+	exports.default = Searchbox;
+
+/***/ },
+/* 503 */
+/*!**********************************************!*\
+  !*** ./semantic-ui/components/input.min.css ***!
+  \**********************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 504 */,
+/* 505 */
+/*!***********************************************!*\
+  !*** ./semantic-ui/components/search.min.css ***!
+  \***********************************************/
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 506 */,
+/* 507 */
 /*!************************************!*\
   !*** ./components/Config.react.js ***!
   \************************************/
@@ -56498,7 +56579,7 @@ webpackJsonp([0],[
 	exports.default = Config;
 
 /***/ },
-/* 501 */
+/* 508 */
 /*!************************************!*\
   !*** ./components/Obj/PageInfo.js ***!
   \************************************/
@@ -56582,93 +56663,6 @@ webpackJsonp([0],[
 	}();
 	
 	exports.default = PageInfo;
-
-/***/ },
-/* 502 */,
-/* 503 */,
-/* 504 */,
-/* 505 */,
-/* 506 */
-/*!*************************************************!*\
-  !*** ./components/Searchbox/Searchbox.react.js ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	__webpack_require__(/*! ../../semantic-ui/components/input.min.css */ 509);
-	
-	__webpack_require__(/*! ../../semantic-ui/components/icon.min.css */ 485);
-	
-	__webpack_require__(/*! ../../semantic-ui/components/search.min.css */ 507);
-	
-	var _react = __webpack_require__(/*! react */ 7);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 164);
-	
-	var _reactSemantify = __webpack_require__(/*! ../react-semantify */ 222);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Searchbox = _react2.default.createClass({
-	    displayName: 'Searchbox',
-	    render: function render() {
-	        var searchInput = undefined;
-	        if (this.props.disabled) {
-	            searchInput = _react2.default.createElement('input', { className: 'prompt', type: 'text', placeholder: this.props.hint, onChange: this.props.search, disabled: true });
-	        } else {
-	            searchInput = _react2.default.createElement('input', { className: 'prompt', type: 'text', placeholder: this.props.hint, onChange: this.props.search });
-	        }
-	
-	        return _react2.default.createElement(
-	            _reactSemantify.Search,
-	            null,
-	            _react2.default.createElement(
-	                _reactSemantify.Input,
-	                { className: 'fluid icon mini' },
-	                searchInput,
-	                _react2.default.createElement(_reactSemantify.Icon, { className: 'search' })
-	            )
-	        );
-	    }
-	});
-	
-	exports.default = Searchbox;
-
-/***/ },
-/* 507 */
-/*!***********************************************!*\
-  !*** ./semantic-ui/components/search.min.css ***!
-  \***********************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 508 */,
-/* 509 */
-/*!**********************************************!*\
-  !*** ./semantic-ui/components/input.min.css ***!
-  \**********************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 510 */,
-/* 511 */
-/*!************************************************!*\
-  !*** ./semantic-ui/components/message.min.css ***!
-  \************************************************/
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
 
 /***/ }
 ]);
