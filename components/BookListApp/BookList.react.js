@@ -4,7 +4,9 @@ import '../../semantic-ui/components/message.min.css';
 import React from 'react'
 import { render } from 'react-dom'
 
-import { List, Item, Image, Content, Text, Link, Button, Icon, Label, Message } from '../react-semantify'
+import { Link } from 'react-router'
+
+import { List, Item, Image, Content, Text, Button, Icon, Label, Message } from '../react-semantify'
 import Pagination from '../Pagination/Pagination.react'
 import Loader from '../Loader/Loader.react'
 import Searchbox from '../Searchbox/Searchbox.react'
@@ -19,7 +21,7 @@ const BookItem = React.createClass({
 				</Label>
 				<Image className="avatar" src={book.image} width="110px" height="150px"/>
 				<Content>
-					<Link className="header">{book.title}</Link>
+					<Link to={`/book/${book.id}`} className="header">{book.title}</Link>
 					<Text className="description" >{book.subtitle}</Text>
 				</Content>
 			</Item>

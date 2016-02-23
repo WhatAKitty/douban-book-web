@@ -21,7 +21,7 @@ module.exports = {
   },
   devtool: 'source-map',
   module: {
-    noParse: /node_modules\\json-schema\\lib\\validate\.js/,    // For windows env and should be \/ not \\ in linux env.
+    noParse: /node_modules\/json-schema\/lib\/validate\.js/,    // For windows env and should be \/ not \\ in linux env.
     loaders: [
       {
         test: /\.js$/,

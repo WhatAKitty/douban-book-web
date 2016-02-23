@@ -8,13 +8,13 @@ webpackJsonp([1],{
 
 	'use strict';
 
-	__webpack_require__(/*! ../semantic-ui/components/site.min.css */ 509);
+	__webpack_require__(/*! ../semantic-ui/components/site.min.css */ 484);
 
-	__webpack_require__(/*! ../semantic-ui/components/reset.min.css */ 511);
+	__webpack_require__(/*! ../semantic-ui/components/reset.min.css */ 486);
 
 /***/ },
 
-/***/ 509:
+/***/ 484:
 /*!*********************************************!*\
   !*** ./semantic-ui/components/site.min.css ***!
   \*********************************************/
@@ -24,7 +24,7 @@ webpackJsonp([1],{
 
 /***/ },
 
-/***/ 511:
+/***/ 486:
 /*!**********************************************!*\
   !*** ./semantic-ui/components/reset.min.css ***!
   \**********************************************/

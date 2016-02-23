@@ -20,4 +20,15 @@ router.get("/search", (req, res) => {
 	});
 });
 
+router.get("/search/:bookId", (req, res) => {
+	let api = new Douban();
+	api.info(req.params.bookId, (err, data, response) => {
+		if (err) {
+			res.status(err.code).send(err.msg);
+		} else {
+            res.json(data);
+		}
+	});
+});
+
 export default router;
